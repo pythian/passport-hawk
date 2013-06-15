@@ -1,6 +1,6 @@
 {
   "name": "passport-hawk",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Passport strategy for the Hawk authentication schema.",
   "main": "lib/strategy.js",
   "scripts": {
@@ -23,6 +23,6 @@
   },
   "devDependencies": {
     "should": "1.2.x",
-    "mocha": "1.9.x"
+    "mocha": "1.10.x"
   }
 }
