@@ -1,5 +1,6 @@
-var HawkStrategy = require('../lib/strategy'),
-  Hawk = require('hawk');
+var expect = require('expect.js'),
+    HawkStrategy = require('../lib/strategy'),
+    Hawk = require('hawk');
 
 var credentials = {
   key: 'abcd',
@@ -9,13 +10,13 @@ var credentials = {
 };
 
 var strategy = new HawkStrategy(function(id, done) {
-  if(id === credentials.id) return done(null, credentials);
+  if (id === credentials.id) return done(null, credentials);
   return done(null, null);
 });
 
 describe('passport-hawk', function() {
   it('can authenticate a request with a correct header', function(testDone) {
-    var header = Hawk.client.header('http://example.com:8080/resource/4?filter=a', 'GET', { credentials: credentials });  
+    var header = Hawk.client.header('http://example.com:8080/resource/4?filter=a', 'GET', { credentials: credentials });
     var req = {
       headers: {
         authorization: header.field,
@@ -23,16 +24,23 @@ describe('passport-hawk', function() {
       },
       method: 'GET',
       url: '/resource/4?filter=a'
-    };    
+    };
+    var res = {
+      header: {}
+    };
+
     strategy.success = function(user) {
-      user.should.eql('tito');
+      expect(user).to.not.be(null);
+      expect(user).to.be.eql('tito');
+      console.log(res);
       testDone();
     };
-    strategy.authenticate(req);
+
+    strategy.authenticate(req, res);
   });
 
   it('should properly fail with correct challenge code when using different url', function(testDone) {
-    var header = Hawk.client.header('http://example.com:8080/resource/4?filter=a', 'GET', { credentials: credentials });    
+    var header = Hawk.client.header('http://example.com:8080/resource/4?filter=a', 'GET', { credentials: credentials });
     var req = {
       headers: {
         authorization: header.field,
@@ -41,11 +49,17 @@ describe('passport-hawk', function() {
       method: 'GET',
       url: '/resource/4?filter=a'
     };
+    var res = {
+      header: {}
+    };
+
+
     strategy.error = function(challenge) {
-      challenge.message.should.eql('Bad mac');
+      expect(challenge).to.not.be(null);
+      expect(challenge.message).to.be.eql('Bad mac');
       testDone();
     };
-    strategy.authenticate(req);
+    strategy.authenticate(req, res);
   });
 
   it('should call done with false when the id doesnt exist', function(testDone) {
@@ -53,7 +67,7 @@ describe('passport-hawk', function() {
       id: '321321',
       key: 'dsa',
       algorithm: 'sha256'
-    }
+    };
     var authHeader = Hawk.client.header('http://example.com:8080/resource/4?filter=a', 'POST', { credentials: testCredentials });
     var req = {
       headers: {
@@ -63,12 +77,16 @@ describe('passport-hawk', function() {
       method: 'GET',
       url: '/resource/4?filter=a'
     };
+    var res = {
+      header: {}
+    };
 
     strategy.error = function(challenge) {
-      challenge.message.should.eql('Unknown credentials');
+      expect(challenge).to.not.be(null);
+      expect(challenge.message).to.be.eql('Unknown credentials');
       testDone();
     };
-    strategy.authenticate(req);
+    strategy.authenticate(req, res);
   });
 
   it('should fail with a stale request', function(testDone) {
@@ -80,11 +98,17 @@ describe('passport-hawk', function() {
       },
       method: 'GET',
       url: '/resource/4?filter=a'
-    };    
+    };
+    var res = {
+      header: {}
+    };
+
     strategy.error = function(challenge) {
-      challenge.message.should.eql('Stale timestamp');      
+      expect(challenge).to.not.be(null);
+      expect(challenge.message).to.be.eql('Stale timestamp');
       testDone();
     };
-    strategy.authenticate(req);
-  });  
+
+    strategy.authenticate(req, res);
+  });
 });
