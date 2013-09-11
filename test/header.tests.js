@@ -90,7 +90,7 @@ describe('passport-hawk', function() {
   });
 
   it('should fail with a stale request', function(testDone) {
-    var fixedHeader = 'Hawk id="dasd123", ts="1366220539", nonce="xVO62D", mac="9x+7TGN6VLRH8zX5PpwewpIzvf+mTt8m7PDQQW2NU/U="';
+    var fixedHeader = 'Hawk id="dasd123", ts="1366220539", nonce="xVO62D", mac="9x+7TGN6VLRH8zX5PpwewpIzvf+mTt8m7PDQQW2NU/U=", ext=""';
     var req = {
       headers: {
         authorization: fixedHeader,
@@ -104,6 +104,7 @@ describe('passport-hawk', function() {
     };
 
     strategy.error = function(challenge) {
+      console.log(challenge);
       expect(challenge).to.not.be(null);
       expect(challenge.message).to.be.eql('Stale timestamp');
       testDone();
