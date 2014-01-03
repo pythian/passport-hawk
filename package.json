@@ -1,8 +1,8 @@
 {
   "name": "passport-hawk",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Passport strategy for the Hawk authentication schema.",
-  "main": "lib/strategy.js",
+  "main": "index.js",
   "scripts": {
     "test": "mocha --require expect.js -R spec"
   },
@@ -18,11 +18,11 @@
   "license": "MIT",
   "dependencies": {
     "passport": "0.1.x",
-    "hawk": "1.1.x",
+    "hawk": "2.0.x",
     "xtend": "2.0.x"
   },
   "devDependencies": {
     "expect.js": "0.2.x",
-    "mocha": "1.12.x"
+    "mocha": "1.16.x"
   }
 }
