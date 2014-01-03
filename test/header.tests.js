@@ -1,5 +1,5 @@
 var expect = require('expect.js'),
-    HawkStrategy = require('../lib/strategy'),
+    HawkStrategy = require('../index'),
     Hawk = require('hawk');
 
 var credentials = {
@@ -32,7 +32,6 @@ describe('passport-hawk', function() {
     strategy.success = function(user) {
       expect(user).to.not.be(null);
       expect(user).to.be.eql('tito');
-      console.log(res);
       testDone();
     };
 
@@ -104,7 +103,6 @@ describe('passport-hawk', function() {
     };
 
     strategy.error = function(challenge) {
-      console.log(challenge);
       expect(challenge).to.not.be(null);
       expect(challenge.message).to.be.eql('Stale timestamp');
       testDone();
