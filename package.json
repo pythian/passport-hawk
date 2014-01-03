@@ -19,7 +19,7 @@
   "dependencies": {
     "passport": "0.1.x",
     "hawk": "2.0.x",
-    "xtend": "2.0.x"
+    "xtend": "2.1.x"
   },
   "devDependencies": {
     "expect.js": "0.2.x",
